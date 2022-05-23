@@ -184,17 +184,17 @@ cv::Mat dst;
 
 void on_tracker(int blur, void *) {
   cv::medianBlur(src, dst, blur * 2 + 1);
-  cv::imshow("image", dst);
+  cv::imshow("Display", dst);
 }
 
 int main() {
   src = cv::imread("lena.jpg");
 
-  cv::namedWindow("image", cv::WINDOW_AUTOSIZE);
-  cv::createTrackbar("blur", "image", nullptr, 10, on_tracker);
-  cv::setTrackbarPos("blur", "image", 5);
+  cv::namedWindow("Display", cv::WINDOW_AUTOSIZE);
+  cv::createTrackbar("blur", "Display", nullptr, 10, on_tracker);
+  cv::setTrackbarPos("blur", "Display", 5);
 
-  on_tracker(5, 0);
+  on_tracker(5,0);
   while (cv::waitKey(100) < 0) {
   }
 
