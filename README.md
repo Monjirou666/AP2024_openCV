@@ -5,8 +5,8 @@ OpenCV（Open Source Computer Vision Library）は，画像処理，画像解析
 そのため，検索すればOpenCVの使い方についての，数多くのページがでてきます．が，公式のTutorialsやExampleが非常に充実しているので，まずはそれらを参考にすることをお勧めします．
 
 - [公式](https://opencv.org/)
-- [公式のチュートリアル](https://docs.opencv.org/4.5.0/d9/df8/tutorial_root.html　)
-- [公式のExample](https://docs.opencv.org/4.5.0/examples.html　)
+- [公式のチュートリアル](https://docs.opencv.org/4.5.0/d9/df8/tutorial_root.html)
+- [公式のExample](https://docs.opencv.org/4.5.0/examples.html)
 - [OpenCV modules](https://docs.opencv.org/4.5.0/)
 
 
