@@ -9,7 +9,7 @@ sudo apt update
 sudo apt install libopencv-dev libopencv-contrib-dev
 ```
 
-次に，wslのGUIアプリを起動するためのGWSLをインストールする
+次に，wslのGUIアプリを起動するためのGWSLをインストールします．
 
 1. Microsoft store で「GWSL」と検索してインストール．
 2. インストールが完了したら「GWSL」を起動
