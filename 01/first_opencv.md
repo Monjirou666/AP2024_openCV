@@ -59,7 +59,7 @@ target_link_libraries(main ${OpenCV_LIBS})
 
 ### コンパイル，実行
 
-上で準備した，opencvTest_first.cppとCMakeLists.txt，および[lena.jpg](lena.jpg)を同じフォルダーにいれて，コンパイル及び実行してみる．
+上で準備した，[opencvTest_first.cpp](opencvTest_first.cpp)と[CMakeLists.txt](CMakeLists.txt)，および[lena.jpg](lena.jpg)を同じフォルダーにいれて，コンパイル及び実行してみる．
 
 ```
 cmake .
