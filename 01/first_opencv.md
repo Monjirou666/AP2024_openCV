@@ -67,6 +67,8 @@ make
 ./main
 ```
 
+よく見かける画像が表示されるはずです．何かキーを押せば終了します．
+
 ## 簡単な画像処理1（画像の平滑化)
 
 画像を平滑化（ざっくりいえば，画像をぼかす）をやってみます．[cv::medianBlur（）](https://docs.opencv.org/4.2.0/d4/d86/group__imgproc__filter.html#ga564869aa33e58769b4469101aac458f9)という関数が使えます．
@@ -120,3 +122,32 @@ int main()
 
 `alpha`, `beta`を変えることで，変化の度合いを変えられます．
 
+## トラックバー
+
+上記の画像処理では，変化の度合いはコンパイル時に決め打ちでした．トラックバーをつけて実行時に変更できるようにしてみます．
+[cv::createTrackbar](https://docs.opencv.org/4.2.0/d7/dfc/group__highgui.html#gaf78d2155d30b728fc413803745b67a9b)を使います．
+
+```
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+int main() {
+  cv::Mat src, dst;
+  int blur = 5;
+
+  src = cv::imread("lena.jpg");
+
+  cv::namedWindow("Display", cv::WINDOW_AUTOSIZE);
+  cv::createTrackbar("blur", "Display", &blur, 10);
+
+  while (cv::waitKey(100) < 0) {
+    cv::medianBlur(src, dst, blur * 2 + 1);
+    cv::imshow("Display", dst);
+  }
+
+  return 0;
+}
+```
+
+- `cv::namedWindow()`で画像を表示するWindow（"Display"）を生成し， cv::createTrackbar(）でトラックバーをWindow（"Display"）に作成します．
+- `cv::createTrackbar(）`の一つ目の引数は，生成するトラックバーの名前， 二つ目はトラックバーを生成するWindowの名前，三つ目は，トラックバーの位置の値を入れる変数，四つ目はトラックバーの取りうる最大値．
