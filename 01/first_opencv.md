@@ -22,6 +22,14 @@ int main() {
 }
 ```
 
+#### 解説
+
+- `cv::Mat image = cv::imread("lena.jpg");`が画像ファイルを読み込み，cv::Mat型の変数imageにデータを格納します．
+- `cv::imshow("Display", image);`で，imageに入っている画像を表示します．一つ目の引数（"Display"）は画像を表示するWindowの名前（タイトル）になります．
+- `cv::waitKey(0);`でキー入力を待ちます．引数は，待つ時間[msec]です．これを0にすると，キー入力があるまで，ずっと待ちます．
+
+### コンパイル，実行
+
 コンパイルはcmakeを使うと楽です．[公式のチュートリアル](https://docs.opencv.org/4.2.0/db/df5/tutorial_linux_gcc_cmake.html)だと，
 以下のようなCMakeLists.txt
 
@@ -57,7 +65,6 @@ target_link_libraries(main ${OpenCV_LIBS})
 ```
 としておくと，後ほど楽です．set(SOURCES... のところで，作成したソースファイル名を指定してください．mainという実行ファイルが生成されます．
 
-### コンパイル，実行
 
 上で準備した，[opencvTest_first.cpp](opencvTest_first.cpp)と[CMakeLists.txt](CMakeLists.txt)，および[lena.jpg](lena.jpg)を同じフォルダーにいれて，コンパイル及び実行してみる．
 
