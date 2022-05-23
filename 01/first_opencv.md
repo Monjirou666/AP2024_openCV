@@ -158,7 +158,7 @@ int main() {
 
 - `cv::namedWindow()`で画像を表示するWindow（"Display"）を生成し， cv::createTrackbar(）でトラックバーをWindow（"Display"）に作成します．
 - `cv::createTrackbar(）`の一つ目の引数は，生成するトラックバーの名前， 二つ目はトラックバーを生成するWindowの名前，三つ目はトラックバーの位置の値を入れる変数（の参照），四つ目はトラックバーの取りうる最大値．
-- whileループの中で，blurを書けて表示するを繰り返してます．
+- whileループの中で，blurをかけて表示するを繰り返してます．
 
 トラックバーを移動させたら，blurの度合いが変わることを確認してみてください．
 
@@ -192,9 +192,9 @@ int main() {
 
   cv::namedWindow("Display", cv::WINDOW_AUTOSIZE);
   cv::createTrackbar("blur", "Display", nullptr, 10, on_tracker);
-  cv::setTrackbarPos("blur", "Display", 5);
+  cv::setTrackbarPos("blur", "Display", 5); //トラックバーの初期位置を設定
 
-  on_tracker(5,0);
+  on_tracker(5,0); //一度，画像を表示
   while (cv::waitKey(100) < 0) {
   }
 
@@ -204,6 +204,8 @@ int main() {
 
 cv::createTrackbar()にて，三つ目はトラックバーの位置の値を入れる変数（の参照）を指定していたのがnullptrになり，五つ目の引数でcallback関数を渡しています．
 callback関数は，上で定義されている`void on_tracker(int blur, void *) `で，トラックバーを変更したときに，この関数が呼び出されます．
+
+callback関数を使うと，トラックバーの変化があったときだけ，blurをかけて画像を再表示することになるので，計算負荷が減ります．また，トラックバーの変化があったときにすぐcallback関数が呼び出されるので，先ほどのcallbackを使わない場合に比べて，反応も早くなっているはずです（マイコンプログラミングでの，ポーリングと割り込みの関係と同じです）
 
 ## 練習問題1
 
