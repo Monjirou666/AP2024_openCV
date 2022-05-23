@@ -66,3 +66,34 @@ cmake .
 make
 ./main
 ```
+
+## 簡単な画像処理1（画像の平滑化)
+
+画像を平滑化（ざっくりいえば，画像をぼかす）をやってみます．[cv::medianBlur（）](https://docs.opencv.org/4.2.0/d4/d86/group__imgproc__filter.html#ga564869aa33e58769b4469101aac458f9)という関数が使えます．
+
+```cpp
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+int main() {
+  cv::Mat src = cv::imread("lena.jpg");
+  cv::Mat dst;
+
+  int blur = 100;  // 変化の度合い 1-10
+
+  cv::medianBlur(src, dst, blur * 2 + 1);
+  cv::imshow("Display", dst);
+
+  cv::waitKey(0);
+
+  return 0;
+}
+```
+
+
+
+## 簡単な画像処理2（contrast, brightness)
+
+
+
+
