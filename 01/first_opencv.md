@@ -151,3 +151,14 @@ int main() {
 
 - `cv::namedWindow()`で画像を表示するWindow（"Display"）を生成し， cv::createTrackbar(）でトラックバーをWindow（"Display"）に作成します．
 - `cv::createTrackbar(）`の一つ目の引数は，生成するトラックバーの名前， 二つ目はトラックバーを生成するWindowの名前，三つ目は，トラックバーの位置の値を入れる変数，四つ目はトラックバーの取りうる最大値．
+- whileループの中で，blurを書けて表示するを繰り返してます．
+
+トラックバーを
+
+
+##　練習問題
+
+- トラックバーを複数生成し，画像のblur(1〜21), brightness(-50〜50), contrast(0〜1)を変化させるプログラムを作成してください．
+
+- whiｓ
+- whi
