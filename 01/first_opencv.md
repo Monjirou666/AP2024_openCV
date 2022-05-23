@@ -155,10 +155,44 @@ int main() {
 
 トラックバーを移動させたら，blurの度合いが変わることを確認してみてください．
 
+## トラックバー(callback利用）
 
-## 練習問題
+とりあえずは，上記の形でトラックバーを使うことができますが，実行したときに
+```
+Using 'value' pointer is unsafe and deprecated. Use NULL as value pointer. To fetch trackbar value setup callback.
+```
+の様なwarningがでていると思います．
+
+それを使ったコードは以下のようになります．
+
+```cpp
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+cv::Mat src;
+cv::Mat dst;
+
+void on_tracker(int blur, void *) {
+  cv::medianBlur(src, dst, blur * 2 + 1);
+  cv::imshow("image", dst);
+}
+
+int main() {
+  src = cv::imread("lena.jpg");
+
+  cv::namedWindow("image", cv::WINDOW_AUTOSIZE);
+  cv::createTrackbar("blur", "image", nullptr, 10, on_tracker);
+  cv::setTrackbarPos("blur", "image", 5);
+
+  on_tracker(5, 0);
+  while (cv::waitKey(100) < 0) {
+  }
+
+  return 0;
+}
+```
+
+## 練習問題1
 
 - トラックバーを複数生成し，画像のblur(1〜21), brightness(-50〜50), contrast(0〜1)を変化させるプログラムを作成してください．
 
-- whiｓ
-- whi
