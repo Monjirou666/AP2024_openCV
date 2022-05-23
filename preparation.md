@@ -32,4 +32,5 @@ brew install opencv
 ```
 opencv_verson
 ```
-としたときに，version番号が表示されば，問題なくインストールされています．
+としたときに，version番号が表示されば，問題なくインストールされています． Windowsだと，4.2.0，Macだと4.5.5あたりになります．
+
