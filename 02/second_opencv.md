@@ -2,7 +2,7 @@
 
 ## 動画の読み込み
 
-動画を読み込んで表示してみます．
+[動画(vtest.avi)](vtest.avi)を読み込んで表示してみます．
 
 ```cpp
 #include <stdio.h>
