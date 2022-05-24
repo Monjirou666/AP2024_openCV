@@ -2,7 +2,7 @@
 
 ## Windows 
 
-wsl2を起動し，OpenCVをインストールしてください．
+wslを起動し，OpenCVをインストールしてください．
 
 ```
 sudo apt update
@@ -15,6 +15,19 @@ sudo apt install libopencv-dev libopencv-contrib-dev
 2. インストールが完了したら「GWSL」を起動
 
 参考：　https://qiita.com/1024xx4/items/45a5cce13eafa17ca6f1
+
+ただし，windows11だと，wslがGUIアプリを起動するための機能が統合されたwslg(Windows Subsystem for Linux GUI)となっているかもしれません．
+その場合は，GWSLのインストールは不要です．
+
+要不要の確認方法は，まず，GWSLをインストールしていない状態で，
+```
+sudo apt install x11-apps
+```
+としたあとに，
+```
+xeyes
+```
+して，何か起動すれば，GWSLのインストールは不要です．
 
 ## Mac
 
