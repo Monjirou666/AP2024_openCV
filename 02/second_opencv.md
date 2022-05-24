@@ -46,9 +46,13 @@ int main()
 [VideoCapture](https://docs.opencv.org/4.5.0/d8/dfe/classcv_1_1VideoCapture.html)が動画を扱うclassです．
 `VideoCapture cap("vtest.avi");`で，そのインスタンス`cap`を生成し，vtest.aviを読み込んでいます．
 
-メソッド`read()`で，1フレーム読み込み，引数であたえたMat型の変数frameに代入し，それを`imshow()`で表示する，という処理をwhileループで繰り返しています．
-また，`read()`はフレームを読み込めたら`true`，読み込めなかったら`false`を返します． https://docs.opencv.org/4.5.0/d8/dfe/classcv_1_1VideoCapture.html#a473055e77dd7faa4d26d686226b292c1
-それを使うことで，wileループにて動画の最後まで読み込みを行います．
+whileループのところで
+- メソッド`read()`で，1フレーム読み込み，引数であたえたMat型の変数frameに代入
+- frameを`imshow()`で表示する
+という処理を繰り返しています．
+
+`read()`はフレームを読み込めたら`true`，読み込めなかったら`false`を返します． https://docs.opencv.org/4.5.0/d8/dfe/classcv_1_1VideoCapture.html#a473055e77dd7faa4d26d686226b292c1
+それを使うことで，whileループにて動画の最後まで読み込むという処理を実現しています
 
 
 ## 動画への画像処理
