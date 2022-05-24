@@ -21,6 +21,6 @@ OpenCV（Open Source Computer Vision Library）は，画像処理，画像解析
 
 0. [準備](preparation.md)
 1.  [画像の表示，簡単な画像処理](01/first_opencv.md)
-2.  動画の表示．トラックバー．キー入力
+2.  動画の表示．キー入力
 3.  背景差分，色検出
 4.  トラッキング
