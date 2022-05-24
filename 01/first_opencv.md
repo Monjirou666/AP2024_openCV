@@ -132,7 +132,7 @@ int main()
 ## トラックバー
 
 上記の画像処理では，変化の度合いはコンパイル時に決め打ちでした．トラックバーをつけて実行時に変更できるようにしてみます．
-[cv::createTrackbar](https://docs.opencv.org/4.2.0/d7/dfc/group__highgui.html#gaf78d2155d30b728fc413803745b67a9b)を使います．
+[cv::createTrackbar()](https://docs.opencv.org/4.2.0/d7/dfc/group__highgui.html#gaf78d2155d30b728fc413803745b67a9b)を使います．
 
 ```cpp
 #include <iostream>
@@ -156,7 +156,8 @@ int main() {
 }
 ```
 
-- `cv::namedWindow()`で画像を表示するWindow（"Display"）を生成し， cv::createTrackbar(）でトラックバーをWindow（"Display"）に作成します．
+- `cv::namedWindow("Display", cv::WINDOW_AUTOSIZE);`で画像を表示する"Display”という名前のWindowを生成します．
+- `cv::createTrackbar("blur", "Display", &blur, 10);`で，"Display”という名前のWindowにトラックバーを作成します．
 - `cv::createTrackbar(）`の一つ目の引数は，生成するトラックバーの名前， 二つ目はトラックバーを生成するWindowの名前，三つ目はトラックバーの位置の値を入れる変数（の参照），四つ目はトラックバーの取りうる最大値．
 - whileループの中で，blurをかけて表示するを繰り返してます．
 
@@ -168,9 +169,10 @@ int main() {
 ```
 Using 'value' pointer is unsafe and deprecated. Use NULL as value pointer. To fetch trackbar value setup callback.
 ```
-の様なwarningがでていると思います．これは，createTrackbar()で，変更する変数を直接していするのではなく，callback関数を使うことを推奨ということです．
-callback関数とは，他の関数に引数として渡す関数のことです．GUIを用いたプログラムでよく用いられます．
-createTrackbar()にcallback関数を設定することで，**トラックバーを変化させたときに関数を実行する**，ということが実現できます．
+の様なwarningがでていると思います．これは，createTrackbar()で変更する変数を参照で直接指定するのではなく，callback関数を使うことを推奨ということです．
+callback関数とは，他の関数に引数として渡す関数のことです．
+createTrackbar()にcallback関数を渡すことで，**トラックバーを変化させたときに関数を実行する**，ということが実現できます．
+OpenCVに限らす，GUIを用いたプログラムではcallback関数がよく使われます．
 
 
 callback関数を使ったコード例は，以下のようになります．
