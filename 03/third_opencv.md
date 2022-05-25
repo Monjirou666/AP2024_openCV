@@ -74,6 +74,9 @@ int main() {
 - [https://docs.opencv.org/4.x/d7/df6/classcv_1_1BackgroundSubtractor.html](https://docs.opencv.org/4.x/d7/df6/classcv_1_1BackgroundSubtractor.html)
 - [https://github.com/opencv/opencv_contrib/tree/6520dbaa224a661ca8105b1ab0b71451fd715f4c/modules/bgsegm](https://github.com/opencv/opencv_contrib/tree/6520dbaa224a661ca8105b1ab0b71451fd715f4c/modules/bgsegm)
 
+- [https://docs.opencv.org/4.5.0/d2/d55/group__bgsegm.html](https://docs.opencv.org/4.5.0/d2/d55/group__bgsegm.html)
+
+
 ## しきい値処理
     
 ## 色検出
