@@ -108,8 +108,58 @@ whileループのところで，
 
 ## フレーム位置を指定
 
-- 色変換 RGB to gray
-- キー入力で途中終了．
+ここまでは，動画を先頭から順に再生（表示）していましたが，再生位置を指定することができます．その例を示します．
+
+
+
+```cpp
+#include <stdio.h>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+VideoCapture cap;
+
+void on_tracker(int p_, void *) {
+    cap.set(CAP_PROP_POS_FRAMES, p_); 
+}
+
+int main() {
+  cap.open("vtest.avi");
+
+  if (!cap.isOpened()) {
+    return -1;
+  }
+
+  Mat src;
+  namedWindow("movie", WINDOW_AUTOSIZE);
+  createTrackbar("pos", "movie", nullptr, (int)cap.get(CAP_PROP_FRAME_COUNT),
+                 on_tracker);
+  setTrackbarPos("pos", "movie", 0);
+
+  while (cap.read(src)) {
+    imshow("movie", src);
+    waitKey(33);
+  }
+  return 0;
+}
+```
+
+トラックバーに紐付けたcallback関数`on_tracker`の中で，
+```
+cap.set(CAP_PROP_POS_FRAMES, p_); 
+```
+として，動画のフレーム位置（再生位置）を変更しています．`p_`はトラックバーの位置です．
+
+他にsetできるものは，[ここ](https://docs.opencv.org/4.5.0/d8/dfe/classcv_1_1VideoCapture.html#a8c6d8c2d37505b5ca61ffd4bb54e9a7c)を参照．
+
+
+## 色変換 RGB to gray
+
+
+## キー入力
+
+
 
 ## 練習問題2
 
