@@ -110,7 +110,7 @@ whileループのところで，
 
 画像処理の別な例として，カラー画像をグレースケール画像に変換してみます．`cvtColor()`を使えば簡単です．
 
-```
+```cpp
 #include <stdio.h>
 
 #include <opencv2/opencv.hpp>
