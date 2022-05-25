@@ -344,12 +344,12 @@ VideoCapture cap;
 
 void on_tracker(int p, void *) { cap.set(CAP_PROP_POS_FRAMES, p); }
 
-const double B_MAX = 50;
-const double B_MIN = 0;
-const double G_MAX = 50;
-const double G_MIN = 0;
-const double R_MAX = 250;
-const double R_MIN = 100;
+double B_MAX = 50;
+double B_MIN = 0;
+double G_MAX = 50;
+double G_MIN = 0;
+double R_MAX = 250;
+double R_MIN = 100;
 
 int main() {
   cap.open("vtest.avi");
@@ -413,12 +413,12 @@ src.copyTo(dst, mask);
 
 この例では，
 ```
-const double B_MAX = 50;
-const double B_MIN = 0;
-const double G_MAX = 50;
-const double G_MIN = 0;
-const double R_MAX = 250;
-const double R_MIN = 100;
+double B_MAX = 50;
+double B_MIN = 0;
+double G_MAX = 50;
+double G_MIN = 0;
+double R_MAX = 250;
+double R_MIN = 100;
 ```
 より，B,Gに比べRの範囲を広くしていますので，赤色を抽出するような処理になっています．これらの値を変えた時の変化を確認してみてください．
 （ただし，vtest.aviではなく，色がはっきりした他の動画の方が変化がわかりやすいかも知れません）
