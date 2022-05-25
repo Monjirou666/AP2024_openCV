@@ -160,10 +160,9 @@ whileループ直前の
 int history = 100;
 float varThreshold = 50;
 bool bShadowDetection = false;
-Ptr<BackgroundSubtractor> bgfs =
-      createBackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
+Ptr<BackgroundSubtractor> bgfs = createBackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
 ```      
-にて，動的な背景を生成する準備をしています．createBackgroundSubtractorMOG2の
+にて，動的な背景を生成する準備をしています．`createBackgroundSubtractorMOG2()`の
 
 - 一つ目の引数で`history`で動的な背景を生成するのに何枚の画像を使うか，
 - 二つ目の引数で，背景かどうかを判定する閾値
