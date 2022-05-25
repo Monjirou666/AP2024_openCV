@@ -7,4 +7,116 @@
 
 抽出した対象の輪郭を抽出してみます．
 
+```cpp
+#include <stdio.h>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+VideoCapture cap;
+
+void on_tracker(int p, void *) { cap.set(CAP_PROP_POS_FRAMES, p); }
+
+int main() {
+  cap.open("vtest.avi");
+
+  if (!cap.isOpened()) {
+    return -1;
+  }
+
+  Mat src, mask, dst, gray, back;
+  namedWindow("movie", WINDOW_AUTOSIZE);
+  setWindowProperty("movie", WND_PROP_TOPMOST, 1);
+  createTrackbar("pos", "movie", nullptr, (int)cap.get(CAP_PROP_FRAME_COUNT),
+                 on_tracker);
+  setTrackbarPos("pos", "movie", 0);
+
+  bool playing = true;
+  bool loopflag = true;
+  double thresh = 50;
+
+  cap.read(src);
+  cvtColor(src, back, COLOR_RGB2GRAY);
+
+  while (loopflag) {
+    if (playing && cap.read(src)) {
+      cvtColor(src, gray, COLOR_RGB2GRAY);
+      absdiff(gray, back, mask);
+      threshold(mask, dst, thresh, 255, THRESH_BINARY);
+
+      std::vector<std::vector<Point> > contours;
+      std::vector<Vec4i> hierarchy;
+      findContours(dst, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+      for (int i = 0; i < contours.size(); i++) {
+        drawContours(src, contours, (int)i, Scalar(0, 0, 255), 2);
+      }
+      imshow("movie", src);
+    }
+
+    char c = waitKey(30);
+    switch (c) {
+      case ' ':
+        playing = !playing;
+        break;
+      case 'e':
+        loopflag = false;
+        break;
+      case 's':
+        cap.set(CAP_PROP_POS_FRAMES, 0);
+      default:
+        break;
+    }
+  }
+
+  return 0;
+}
+```
+
+輪郭の抽出は，[`findContours()`](https://docs.opencv.org/4.5.0/d3/dc0/group__imgproc__shape.html#gadf1ad6a0b82947fa1fe3c3d497f260e0)でできます．
+
+```cpp
+std::vector<std::vector<Point> > contours;
+std::vector<Vec4i> hierarchy;
+findContours(dst, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+```
+
+`findContours()`の引数は，
+- 一つ目: 入力画像
+- 二つ目: 抽出した輪郭の点の情報をいれる変数
+- 三つ目: 抽出した輪郭が階層構造を持つ場合に，その情報を入れる変数
+- 四つ目: [抽出のモード](https://docs.opencv.org/4.5.0/d3/dc0/group__imgproc__shape.html#ga819779b9857cc2f8601e6526a3a5bc71)
+- 五つ目: [輪郭の抽出手法](https://docs.opencv.org/4.5.0/d3/dc0/group__imgproc__shape.html#ga4303f45752694956374734a03c54d5ff)
+
+上の例だと，
+
+- RETR_EXTERNAL: 最も外側の輪郭のみを抽出
+- CHAIN_APPROX_SIMPLE: 水平・垂直・斜めの線分を圧縮し，それらの端点のみを残す
+
+で，輪郭が抽出され，その点のデータが，`cv::Point`の2次元ベクトル`contours`に格納されます．
+上を実行してみるとよくわかると思いますが，輪郭は複数抽出されることがあるので，各輪郭毎に点がまとまった2次元ベクトルとして抽出結果が格納されています．
+
+それを，抽出された輪郭の点群を表示するには，[`drawContours()`](https://docs.opencv.org/4.5.0/d6/d6e/group__imgproc__draw.html#ga746c0625f1781f1ffc9056259103edbc)を使います．
+
+```cpp
+for (int i = 0; i < contours.size(); i++) {
+  drawContours(src, contours, (int)i, Scalar(0, 0, 255), 2);
+}
+```
+
+`drawContours()`の引数は，
+- 一つ目: 出力画像
+- 二つ目: 抽出した輪郭が入った変数
+- 三つ目: どの輪郭を描くか
+- 四つ目: 輪郭の色
+- 五つ目: 輪郭線の太さ
+
+です． 
+contoursには各輪郭毎に点がまとまった2次元ベクトルとして抽出結果が入っているので，
+各輪郭を一つずつ取り出し，その点群を表示という形で，抽出した輪郭の表示をしています．
+
+
+
+
+
+
 
