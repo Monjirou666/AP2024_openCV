@@ -331,6 +331,99 @@ src.copyTo(dst, mask);
     
 ## 色検出
 
+背景差分とは別な方法として，色を検出（抽出）する方法があります．まずはBGRのままやってみます．
+
+
+```
+#include <stdio.h>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+VideoCapture cap;
+
+void on_tracker(int p, void *) { cap.set(CAP_PROP_POS_FRAMES, p); }
+
+const double B_MAX = 50;
+const double B_MIN = 0;
+const double G_MAX = 50;
+const double G_MIN = 0;
+const double R_MAX = 250;
+const double R_MIN = 100;
+
+int main() {
+  cap.open("vtest.avi");
+
+  if (!cap.isOpened()) {
+    return -1;
+  }
+
+  Mat src;
+  namedWindow("movie", WINDOW_AUTOSIZE);
+  setWindowProperty("movie", WND_PROP_TOPMOST, 1);
+  createTrackbar("pos", "movie", nullptr, (int)cap.get(CAP_PROP_FRAME_COUNT),
+                 on_tracker);
+  setTrackbarPos("pos", "movie", 0);
+
+  bool playing = true;
+  bool loopflag = true;
+
+  while (loopflag) {
+    if (playing && cap.read(src)) {
+      Mat dst, mask;
+
+      Scalar s_min = Scalar(B_MIN, G_MIN, R_MIN);
+      Scalar s_max = Scalar(B_MAX, G_MAX, R_MAX);
+      inRange(src, s_min, s_max, mask);
+      src.copyTo(dst, mask);
+
+      imshow("movie", dst);
+    }
+
+    char c = waitKey(30);
+    switch (c) {
+      case ' ':
+        playing = !playing;
+        break;
+      case 'e':
+        loopflag = false;
+        break;
+      case 's':
+        cap.set(CAP_PROP_POS_FRAMES, 0);
+      default:
+        break;
+    }
+  }
+
+  return 0;
+}
+```
+
+ポイントは，
+```
+Scalar s_min = Scalar(B_MIN, G_MIN, R_MIN);
+Scalar s_max = Scalar(B_MAX, G_MAX, R_MAX);
+inRange(src, s_min, s_max, mask);
+src.copyTo(dst, mask);
+```
+
+のあたりです．まず，B,G,Rのそれぞれの値の下限値上限値を準備し（`s_min`, `s_max`），それを使って
+['inRange()'](https://docs.opencv.org/4.5.0/d2/de8/group__core__array.html#ga48af0ab51e36436c5d04340e036ce981)で，マスク画像を生成しています．
+マスク画像ができたら，上の例と同様に`copyTo()`でマスクをかけた画像を生成しています．
+
+この例では，
+```
+const double B_MAX = 50;
+const double B_MIN = 0;
+const double G_MAX = 50;
+const double G_MIN = 0;
+const double R_MAX = 250;
+const double R_MIN = 100;
+```
+より，B,Gに比べRの範囲を広くしていますので，赤色を抽出するような処理になっています．これらの値を変えた時の変化を確認してみてください．
+（ただし，vtest.aviではなく，色がはっきりした他の動画の方が変化がわかりやすいかも知れません）
+
+
 ### BGRでマスク
 
 ## 練習問題3
