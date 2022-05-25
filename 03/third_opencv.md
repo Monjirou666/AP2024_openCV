@@ -321,7 +321,7 @@ int main() {
 }
 ```
 
-```
+```cpp
 Mat dst;
 src.copyTo(dst, mask);
 ```
@@ -334,7 +334,7 @@ src.copyTo(dst, mask);
 背景差分とは別な方法として，色を検出（抽出）する方法があります．まずはBGRのままやってみます．
 
 
-```
+```cpp
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 
@@ -400,7 +400,7 @@ int main() {
 ```
 
 ポイントは，
-```
+```cpp
 Scalar s_min = Scalar(B_MIN, G_MIN, R_MIN);
 Scalar s_max = Scalar(B_MAX, G_MAX, R_MAX);
 inRange(src, s_min, s_max, mask);
@@ -412,7 +412,7 @@ src.copyTo(dst, mask);
 マスク画像ができたら，上の例と同様に`copyTo()`でマスクをかけた画像を生成しています．
 
 この例では，
-```
+```cpp
 double B_MAX = 50;
 double B_MIN = 0;
 double G_MAX = 50;
