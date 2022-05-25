@@ -73,9 +73,9 @@ int main() {
 cap.read(src);
 cvtColor(src, back, COLOR_BGR2GRAY);
 ```
-にて，一度画像を取得し，それを背景画像としています．
+にて，一度画像を取得し，それをグレースケールに変換したものを背景画像`back`としています．
 
-whileループ内で，取得した画像をグレースケールに変換し，それ(`gray`）と背景画像（back)との差分を，[`absdiff()`](https://docs.opencv.org/4.5.0/d2/de8/group__core__array.html#ga6fef31bc8c4071cbc114a758a2b79c14)で計算し，結果を`dst`に入れています．
+whileループ内で，取得した画像をグレースケールに変換し`gray`，それと背景画像`back`との差分を，[`absdiff()`](https://docs.opencv.org/4.5.0/d2/de8/group__core__array.html#ga6fef31bc8c4071cbc114a758a2b79c14)で計算し，結果を`dst`に入れています．
 
 
 
