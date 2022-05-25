@@ -172,7 +172,7 @@ Ptr<BackgroundSubtractor> bgfs = createBackgroundSubtractorMOG2(history, varThre
 
 背景差分を計算しているところは，whileループ中の
 
-```
+```cpp
 bgfs->apply(src, dst);
 ```
 
@@ -182,6 +182,76 @@ bgfs->apply(src, dst);
 
 
 ## しきい値処理
+    
+背景差分をするときの，```absdiff()```で生成される画像はグレースケールになっています．これを2値化して，マスク画像を作ってみます．
+
+```cpp
+#include <stdio.h>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+VideoCapture cap;
+
+void on_tracker(int p, void *) { cap.set(CAP_PROP_POS_FRAMES, p); }
+
+int main() {
+  cap.open("vtest.avi");
+
+  if (!cap.isOpened()) {
+    return -1;
+  }
+
+  Mat src, mask, dst, gray, back;
+  namedWindow("movie", WINDOW_AUTOSIZE);
+  setWindowProperty("movie", WND_PROP_TOPMOST, 1);
+  createTrackbar("pos", "movie", nullptr, (int)cap.get(CAP_PROP_FRAME_COUNT),
+                 on_tracker);
+  setTrackbarPos("pos", "movie", 0);
+
+  bool playing = true;
+  bool loopflag = true;
+  double thresh = 150;
+
+  cap.read(src);
+  cvtColor(src, back, COLOR_BGR2GRAY);
+
+  while (loopflag) {
+    if (playing && cap.read(src)) {
+      cvtColor(src, gray, COLOR_BGR2GRAY);
+      absdiff(gray, back, mask);
+      threshold(mask, dst, thresh, 255, THRESH_BINARY);
+
+      imshow("movie", dst);
+    }
+
+    char c = waitKey(30);
+    switch (c) {
+      case ' ':
+        playing = !playing;
+        break;
+      case 'e':
+        loopflag = false;
+        break;
+      case 's':
+        cap.set(CAP_PROP_POS_FRAMES, 0);
+      default:
+        break;
+    }
+  }
+```
+
+二値化をしているのは，[`threshold()`](https://docs.opencv.org/4.5.0/d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57)です．
+
+引数は
+- 一つ目: 入力画像
+- 二つ目: 出力画像
+- 三つ目: 閾値
+- 四つ目: 閾値以上の値を持つ画素に対して割り当てられる値
+- 五つ目: [2値化の方法](https://docs.opencv.org/4.5.0/d7/d1b/group__imgproc__misc.html#gaa9e58d2860d4afa658ef70a9b1115576)
+
+です．
+
     
 ## 色検出
 
