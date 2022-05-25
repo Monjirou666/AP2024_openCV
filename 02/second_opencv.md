@@ -205,22 +205,71 @@ cap.get(CAP_PROP_FRAME_COUNT)
 
 
 
-
-
-
 ## キー入力
+
+`waitKey()`で，キー入力を待つことができますが，そのときに入力されたキーに応じた処理をするということができます．
+
+
+```cpp
+#include <stdio.h>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+int main() {
+  VideoCapture cap("vtest.avi");
+
+  if (!cap.isOpened()) {
+    return -1;
+  }
+
+  Mat src;
+  namedWindow("movie", WINDOW_AUTOSIZE);
+
+  bool loopflag = true;
+
+  while (loopflag) {
+    if (cap.read(src)) {
+      imshow("movie", src);
+    } else {
+      loopflag = false;
+    }
+
+    char c = waitKey(10);
+    switch (c) {
+      case 'e':
+        loopflag = false;
+      default:
+        break;
+    }
+  }
+
+  return 0;
+}
+```
+
+```
+char c = waitKey(10);
+```
+と，`waitKey()`の戻り値をchar型の変数に代入してやり，それをif文なりswitch文なりで処理してあげれば，
+キー入力に応じた処理をすることができます．
+この例では，`e`が入力されたら，whileループから抜けて，プログラムが終了するようになっています．
 
 
 
 ## 練習問題2
 
-キー入力でいろいろ操作
-- grayかRGBか
+[動画(vtest.avi)](vtest.avi)を読み込み表示させる際，キー入力でいろいろ操作できるものを作成してください．
+
+たとえば，
+
+- grayかRGBを切り替える
 - ポーズ
+- ポーズ時に，1フレーム進む，1フレーム戻る．
 - 巻き戻し（先頭へ）
 - キー入力で途中終了
 
-など．
+などを実装してみてください．
 
 
 
