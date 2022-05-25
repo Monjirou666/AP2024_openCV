@@ -235,7 +235,7 @@ int main() {
       loopflag = false;
     }
 
-    char c = waitKey(10);
+    int c = waitKey(10);
     switch (c) {
       case 'e':
         loopflag = false;
@@ -249,7 +249,7 @@ int main() {
 ```
 
 ```
-char c = waitKey(10);
+int c = waitKey(10);
 ```
 と，`waitKey()`の戻り値をchar型の変数に代入してやり，それをif文なりswitch文なりで処理してあげれば，
 キー入力に応じた処理をすることができます．
