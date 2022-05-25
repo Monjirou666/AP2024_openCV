@@ -202,7 +202,7 @@ int main() {
     return -1;
   }
 
-  Mat src, mask, dst, gray, back;
+  Mat src, mask, dst, gray, back, diff;
   namedWindow("movie", WINDOW_AUTOSIZE);
   setWindowProperty("movie", WND_PROP_TOPMOST, 1);
   createTrackbar("pos", "movie", nullptr, (int)cap.get(CAP_PROP_FRAME_COUNT),
@@ -211,7 +211,7 @@ int main() {
 
   bool playing = true;
   bool loopflag = true;
-  double thresh = 150;
+  double thresh = 30;
 
   cap.read(src);
   cvtColor(src, back, COLOR_BGR2GRAY);
@@ -219,8 +219,85 @@ int main() {
   while (loopflag) {
     if (playing && cap.read(src)) {
       cvtColor(src, gray, COLOR_BGR2GRAY);
-      absdiff(gray, back, mask);
-      threshold(mask, dst, thresh, 255, THRESH_BINARY);
+      absdiff(gray, back, diff);
+      threshold(diff, mask, thresh, 255, THRESH_BINARY);
+
+      imshow("movie", mask);
+    }
+
+    char c = waitKey(30);
+    switch (c) {
+      case ' ':
+        playing = !playing;
+        break;
+      case 'e':
+        loopflag = false;
+        break;
+      case 's':
+        cap.set(CAP_PROP_POS_FRAMES, 0);
+      default:
+        break;
+    }
+  }
+
+  return 0;
+}
+```
+
+二値化をしているのは，[`threshold()`](https://docs.opencv.org/4.5.0/d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57)です．
+
+引数は
+- 一つ目: 入力画像
+- 二つ目: 出力画像
+- 三つ目: 閾値
+- 四つ目: 閾値以上の値を持つ画素に対して割り当てられる値
+- 五つ目: [2値化の方法](https://docs.opencv.org/4.5.0/d7/d1b/group__imgproc__misc.html#gaa9e58d2860d4afa658ef70a9b1115576)
+
+です．
+
+第三引数の閾値の値をかえるとマスク画像が変化します．確認してみてください．トラックバーで変更できるようにするとわかりやすくなります．
+
+マスク画像が準備できると，元の画像から動いている部分だけを表示といったこともできます．先ほどをちょっと修正するだけです．
+
+```cpp
+#include <stdio.h>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+VideoCapture cap;
+
+void on_tracker(int p, void *) { cap.set(CAP_PROP_POS_FRAMES, p); }
+
+int main() {
+  cap.open("vtest.avi");
+
+  if (!cap.isOpened()) {
+    return -1;
+  }
+
+  Mat src, mask, gray, back, diff;
+  namedWindow("movie", WINDOW_AUTOSIZE);
+  setWindowProperty("movie", WND_PROP_TOPMOST, 1);
+  createTrackbar("pos", "movie", nullptr, (int)cap.get(CAP_PROP_FRAME_COUNT),
+                 on_tracker);
+  setTrackbarPos("pos", "movie", 0);
+
+  bool playing = true;
+  bool loopflag = true;
+  double thresh = 30;
+
+  cap.read(src);
+  cvtColor(src, back, COLOR_BGR2GRAY);
+
+  while (loopflag) {
+    if (playing && cap.read(src)) {
+      cvtColor(src, gray, COLOR_BGR2GRAY);
+      absdiff(gray, back, diff);
+      threshold(diff, mask, thresh, 255, THRESH_BINARY);
+
+      Mat dst;
+      src.copyTo(dst, mask);
 
       imshow("movie", dst);
     }
@@ -239,21 +316,17 @@ int main() {
         break;
     }
   }
+
+  return 0;
+}
 ```
 
-二値化をしているのは，[`threshold()`](https://docs.opencv.org/4.5.0/d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57)です．
-
-引数は
-- 一つ目: 入力画像
-- 二つ目: 出力画像
-- 三つ目: 閾値
-- 四つ目: 閾値以上の値を持つ画素に対して割り当てられる値
-- 五つ目: [2値化の方法](https://docs.opencv.org/4.5.0/d7/d1b/group__imgproc__misc.html#gaa9e58d2860d4afa658ef70a9b1115576)
-
-です．
-
-第三引数の閾値の値をかえるとマスク画像が変化します．確認してみてください．トラックバーで変更できるようにするとわかりやすくなります．
-
+```
+Mat dst;
+src.copyTo(dst, mask);
+```
+にて，srcに入っている画像を，[`copyTo()`](https://docs.opencv.org/4.5.0/d3/d63/classcv_1_1Mat.html#a626fe5f96d02525e2604d2ad46dd574f)でdstにコピーしているのですが，
+そのときに，マスク画像を二つ目の引数で渡すことで，srcに入っている画像をマスク画像で切り抜いたものをdstに入れるということができます．
 
     
 ## 色検出
