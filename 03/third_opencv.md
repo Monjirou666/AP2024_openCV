@@ -82,18 +82,104 @@ whileループ内で，取得した画像をグレースケールに変換し，
 ### 動的背景差分
 
 上記の方法は，非常にシンプルですが，
+
 - ノイズの影響
 - 影（移動物体と一緒に移動する）
 - 固定カメラでも照明の変化により背景部分の画像も変化
+
 など，そのままでは，実環境では利用するのは難しいです．
 
 そこで，前もって背景画像を準備するのではなく，逐次的に背景画像を複数枚の画像から生成するといった，動的な背景差分法がいろいろ提案されており，
 OpenCVにもライブラリーとして，使えるものが準備されています．
 
-- [https://docs.opencv.org/4.x/d7/df6/classcv_1_1BackgroundSubtractor.html](https://docs.opencv.org/4.x/d7/df6/classcv_1_1BackgroundSubtractor.html)
-- [https://docs.opencv.org/4.5.0/d2/d55/group__bgsegm.html](https://docs.opencv.org/4.5.0/d2/d55/group__bgsegm.html)
+- [https://docs.opencv.org/4.5.0/d7/df6/classcv_1_1BackgroundSubtractor.html](https://docs.opencv.org/4.5.0/d7/df6/classcv_1_1BackgroundSubtractor.html)
 
+ここでは，その一つである[BackgroundSubtractorMOG2](https://docs.opencv.org/4.5.0/d7/d7b/classcv_1_1BackgroundSubtractorMOG2.html)を使ってみます．
 
+```cpp
+#include <stdio.h>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+VideoCapture cap;
+
+void on_tracker(int p, void *) { cap.set(CAP_PROP_POS_FRAMES, p); }
+
+int main() {
+  cap.open("vtest.avi");
+
+  if (!cap.isOpened()) {
+    return -1;
+  }
+
+  Mat src, dst;
+  namedWindow("movie", WINDOW_AUTOSIZE);
+  setWindowProperty("movie", WND_PROP_TOPMOST, 1);
+  createTrackbar("pos", "movie", nullptr, (int)cap.get(CAP_PROP_FRAME_COUNT),
+                 on_tracker);
+  setTrackbarPos("pos", "movie", 0);
+
+  bool playing = true;
+  bool loopflag = true;
+
+  int history = 100;
+  float varThreshold = 50;
+  bool bShadowDetection = false;
+  Ptr<BackgroundSubtractor> bgfs =
+      createBackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
+
+  while (loopflag) {
+    if (playing && cap.read(src)) {
+      bgfs->apply(src, dst);
+      imshow("movie", dst);
+    }
+
+    char c = waitKey(30);
+    switch (c) {
+      case ' ':
+        playing = !playing;
+        break;
+      case 'e':
+        loopflag = false;
+        break;
+      case 's':
+        cap.set(CAP_PROP_POS_FRAMES, 0);
+      default:
+        break;
+    }
+  }
+
+  return 0;
+}
+```
+
+whileループ直前の
+
+```cpp
+int history = 100;
+float varThreshold = 50;
+bool bShadowDetection = false;
+Ptr<BackgroundSubtractor> bgfs =
+      createBackgroundSubtractorMOG2(history, varThreshold, bShadowDetection);
+```      
+にて，動的な背景を生成する準備をしています．createBackgroundSubtractorMOG2の
+
+- 一つ目の引数で`history`で動的な背景を生成するのに何枚の画像を使うか，
+- 二つ目の引数で，背景かどうかを判定する閾値
+- 三つ目の引数で，影を検出するかどうか
+
+を指定しています．
+
+背景差分を計算しているところは，whileループ中の
+
+```
+bgfs->apply(src, dst);
+```
+
+です．一つ目の引数に，現在の画像(src)を渡し，二つ目の引数(dst)に背景差分の計算結果が格納されます．
+
+単純な背景差分との差や，`history`,`varThreshold`, `bShadowDetection`を変えたときにどうなるかを確認してみてください．
 
 
 ## しきい値処理
