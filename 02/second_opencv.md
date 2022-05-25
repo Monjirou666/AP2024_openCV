@@ -105,6 +105,47 @@ whileループのところで，
 
 同様にすれば，contrastやbrightnessの調整も可能です．やってみましょう．
 
+## 色変換（BGR to gray）
+
+
+画像処理の別な例として，カラー画像をグレースケール画像に変換してみます．`cvtColor()`を使えば簡単です．
+
+```
+#include <stdio.h>
+
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+int main() {
+  VideoCapture cap("vtest.avi");
+
+  if (!cap.isOpened()) {
+    return -1;
+  }
+
+  Mat src, gray;
+  namedWindow("movie", WINDOW_AUTOSIZE);
+
+  while (cap.read(src)) {
+    cvtColor(src, gray, COLOR_BGR2GRAY);
+    imshow("movie", gray);
+    waitKey(30);
+  }
+
+  return 0;
+}
+```
+
+```
+cvtColor(src, gray, COLOR_BGR2GRAY);
+```
+で，`src`に入っている画像をグレースケールに変換し，その結果を`gray`にいれています．他にどういった変換ができるかは，[ここ](https://docs.opencv.org/4.5.0/d8/d01/group__imgproc__color__conversions.html#ga4e0972be5de079fed4e3a10e24ef5ef0) 参照．
+よく使うのは，`COLOR_BGR2GRAY`や`COLOR_BGR2HSV`です．
+
+なお，OpenCVでは，基本的にデータ上の色の並びがB,G,Rの順なので，`COLOR_BGR2GRAY`となってます．OpenCVだけを使っている場合はいいのですが，
+OpenGL他，画像を扱うライブラリでは，R,G,Bの順でデータが構成されていることがあるので，他ライブラリーと一緒に使うときは，注意が必用です
+
 
 ## フレーム位置を指定
 
@@ -139,7 +180,7 @@ int main() {
 
   while (cap.read(src)) {
     imshow("movie", src);
-    waitKey(33);
+    waitKey(30);
   }
   return 0;
 }
@@ -164,7 +205,7 @@ cap.get(CAP_PROP_FRAME_COUNT)
 
 
 
-## 色変換 RGB to gray
+
 
 
 ## キー入力
