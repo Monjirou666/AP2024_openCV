@@ -149,9 +149,19 @@ int main() {
 ```
 cap.set(CAP_PROP_POS_FRAMES, p_); 
 ```
-として，動画のフレーム位置（再生位置）を変更しています．`p_`はトラックバーの位置です．
+として，動画のフレーム位置（再生位置）を変更しています．`p_`はトラックバーの位置です．他にsetできるものは，[ここ](https://docs.opencv.org/4.5.0/d8/dfe/classcv_1_1VideoCapture.html#a8c6d8c2d37505b5ca61ffd4bb54e9a7c)を参照．
 
-他にsetできるものは，[ここ](https://docs.opencv.org/4.5.0/d8/dfe/classcv_1_1VideoCapture.html#a8c6d8c2d37505b5ca61ffd4bb54e9a7c)を参照．
+
+また，
+```
+cap.get(CAP_PROP_FRAME_COUNT)
+```
+で，動画の全フレーム数を調べることができます．`createTrackbar()`の第四引数に渡して，トラックバーの最大値が動画の全フレーム数，つまり，動画の最後になるようにしています．
+
+
+ちなみに，ここでは，`VideoCapture`インスタンス生成の際に動画を読み込むのではなく，
+あとで，`open()`メソッドを使って，動画を読み込んでいます．実行時に読み込むファイルを変えたい場合などには，このやり方が便利です．
+
 
 
 ## 色変換 RGB to gray
