@@ -317,6 +317,122 @@ rectangle(src, boundRect[i].tl(), boundRect[i].br(),
 
 です．
 
-## 面積の重心
+## 抽出した領域の重心
+
+抽出した領域の重心を求めて表示してみます．
+OpenCVでは，領域のモーメントを求めて，それを使って重心を計算できます．
+
+
+
+```
+#include <stdio.h>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+VideoCapture cap;
+
+void on_tracker(int p, void *) { cap.set(CAP_PROP_POS_FRAMES, p); }
+
+int main() {
+  cap.open("vtest.avi");
+
+  if (!cap.isOpened()) {
+    return -1;
+  }
+
+  Mat src, mask, dst, gray, back;
+  namedWindow("movie", WINDOW_AUTOSIZE);
+  setWindowProperty("movie", WND_PROP_TOPMOST, 1);
+  createTrackbar("pos", "movie", nullptr, (int)cap.get(CAP_PROP_FRAME_COUNT),
+                 on_tracker);
+  setTrackbarPos("pos", "movie", 0);
+
+  bool playing = true;
+  bool loopflag = true;
+  double thresh = 50;
+
+  cap.read(src);
+  cvtColor(src, back, COLOR_RGB2GRAY);
+
+  while (loopflag) {
+    if (playing && cap.read(src)) {
+      cvtColor(src, gray, COLOR_RGB2GRAY);
+      absdiff(gray, back, mask);
+      threshold(mask, dst, thresh, 255, THRESH_BINARY);
+
+      std::vector<std::vector<Point> > contours;
+      std::vector<Vec4i> hierarchy;
+
+      findContours(dst, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
+
+      std::vector<Rect> boundRect(contours.size());
+
+      for (int i = 0; i < contours.size(); i++) {
+        if (contourArea(contours[i]) > 100) {
+          drawContours(src, contours, (int)i, Scalar(0, 0, 255), 2);
+
+          boundRect[i] = boundingRect(contours[i]);
+          rectangle(src, boundRect[i].tl(), boundRect[i].br(),
+                    Scalar(255, 0, 0), 2);
+          // top-left, bottom-right
+
+          Moments mu = moments(contours[i]);
+          Point2f mc = Point2f(mu.m10 / mu.m00, mu.m01 / mu.m00);
+
+          circle(src, mc, 4, Scalar(0, 255, 0), 2, 4);
+        }
+      }
+      imshow("movie", src);
+    }
+
+    char c = waitKey(30);
+    switch (c) {
+      case ' ':
+        playing = !playing;
+        break;
+      case 'e':
+        loopflag = false;
+        break;
+      case 's':
+        cap.set(CAP_PROP_POS_FRAMES, 0);
+      default:
+        break;
+    }
+  }
+
+  return 0;
+}
+```
+
+追加されたのは，
+```
+Moments mu = moments(contours[i]);
+Point2f mc = Point2f(mu.m10 / mu.m00, mu.m01 / mu.m00);
+
+circle(src, mc, 4, Scalar(0, 255, 0), 2, 4);
+```
+
+[`moment()`](https://docs.opencv.org/4.5.0/d3/dc0/group__imgproc__shape.html#ga556a180f43cab22649c23ada36a8a139)
+にて，領域`contours[i]`のモーメントを求め，
+
+$$
+( \frac{m_{10}}{m_{00}}, \frac{m_{1}}{m_{00}} ) 
+$$
+
+で重心を計算．
+
+[`circle()`](https://docs.opencv.org/4.5.0/d6/d6e/group__imgproc__draw.html#gaf10604b069374903dbd0f0488cb43670)
+で，重心の位置に○を表示しています．
+
+
+円を表示する`circle()`の引数は，
+- 一つ目: 出力画像
+- 二つ目: 描く円の中心位置
+- 三つ目: 描く円の半径
+- 四つ目: 線の色
+- 五つ目: 線の太さ（これを負の値にすると，塗りつぶす）
+
+です．
 
 
