@@ -323,8 +323,7 @@ rectangle(src, boundRect[i].tl(), boundRect[i].br(),
 OpenCVでは，領域のモーメントを求めて，それを使って重心を計算できます．
 
 
-
-```
+```cpp
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
 
@@ -435,4 +434,9 @@ $$
 
 です．
 
+重心位置を格納した`mc`は，`Point2f`クラスのインスタンスで，　メンバー変数`x`と`y`を持ちます．
+`mc.x`や｀ｍｃ．ｙ｀とすれば，重心の画像上の座標がわかります．
+printfやstd::coutを用いて，重心の座標位置を表示してみてください．
+
+ちなみに`Point2f`はテンプレート[`Point_`](https://docs.opencv.org/4.5.0/db/d4e/classcv_1_1Point__.html)から生成されたクラスです．
 
