@@ -318,3 +318,7 @@ rectangle(src, boundRect[i].tl(), boundRect[i].br(),
 - 五つ目: 線の太さ（これを負の値にすると，塗りつぶす）
 
 です．
+
+## 面積の重心
+
+
