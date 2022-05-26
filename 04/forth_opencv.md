@@ -306,9 +306,9 @@ rectangle(src, boundRect[i].tl(), boundRect[i].br(),
 として，`boundingRect()`で`contours[i]`を囲む外接矩形をもとめ，
 [`rectangle()`](https://docs.opencv.org/4.5.0/d6/d6e/group__imgproc__draw.html#ga07d2f74cadcf8e305e810ce8eed13bc9)でその矩形を表示しています．
 
-`Rect`は矩形を扱うclass(正確にはClass Templateですが）で，矩形の左上の座標や幅や高さの情報を持っています．
-また，`tl()`や`br()`というメソッドで，矩形の左上及び右下の座標を得ることができます．[参照](https://docs.opencv.org/4.5.0/d2/d44/classcv_1_1Rect__.html)
-
+[`Rect`](https://docs.opencv.org/4.5.0/d2/d44/classcv_1_1Rect__.html)は矩形を扱うclass(正確にはClass Templateですが）で，
+矩形の左上の座標や幅や高さの情報を持っています．
+また，`tl()`や`br()`というメソッドで，矩形の左上及び右下の座標を得ることができます．[参照]
 
 矩形を表示する`rectangle()`の引数は，
 - 一つ目: 出力画像
