@@ -164,8 +164,6 @@ int main() {
 
       findContours(dst, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
 
-      std::vector<Rect> boundRect(contours.size());
-
       for (int i = 0; i < contours.size(); i++) {
         if (contourArea(contours[i]) > 50) {
           drawContours(src, contours, (int)i, Scalar(0, 0, 255), 2);
