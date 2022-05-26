@@ -48,6 +48,8 @@ target_link_libraries( DisplayImage ${OpenCV_LIBS} )
 cmake_minimum_required(VERSION 3.16)
 project(MyOpenCVProject CXX)
 
+add_definitions(-std=c++11)
+
 # ソールファイルをここで指定．ファイル分割したときも，ここに追記．
 set(SOURCES
     opencvTest_first.cpp
