@@ -23,7 +23,7 @@ OpenCV（Open Source Computer Vision Library）は，画像処理，画像解析
 1.  [画像の表示，簡単な画像処理](01/first_opencv.md)
 2.  [動画の表示．キー入力](02/second_opencv.md)
 3.  [背景差分，色検出](03/third_opencv.md)
-4.  トラッキング
+4.  [トラッキング](04/forth_opencv.md)
 
 (option)
 - [カメラの利用について](camera.md)
