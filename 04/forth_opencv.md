@@ -209,4 +209,111 @@ for (int i = 0; i < contours.size(); i++) {
 
 
 
+## 輪郭を囲む外接矩形
 
+抽出した輪郭を輪郭を囲む外接矩形を求め，表示してみます．
+
+```cpp
+#include <stdio.h>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+
+VideoCapture cap;
+
+void on_tracker(int p, void *) { cap.set(CAP_PROP_POS_FRAMES, p); }
+
+int main() {
+  cap.open("vtest.avi");
+
+  if (!cap.isOpened()) {
+    return -1;
+  }
+
+  Mat src, mask, dst, gray, back;
+  namedWindow("movie", WINDOW_AUTOSIZE);
+  setWindowProperty("movie", WND_PROP_TOPMOST, 1);
+  createTrackbar("pos", "movie", nullptr, (int)cap.get(CAP_PROP_FRAME_COUNT),
+                 on_tracker);
+  setTrackbarPos("pos", "movie", 0);
+
+  bool playing = true;
+  bool loopflag = true;
+  double thresh = 50;
+
+  cap.read(src);
+  cvtColor(src, back, COLOR_RGB2GRAY);
+
+  while (loopflag) {
+    if (playing && cap.read(src)) {
+      cvtColor(src, gray, COLOR_RGB2GRAY);
+      absdiff(gray, back, mask);
+      threshold(mask, dst, thresh, 255, THRESH_BINARY);
+
+      std::vector<std::vector<Point> > contours;
+      std::vector<Vec4i> hierarchy;
+
+      findContours(dst, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_NONE);
+
+      std::vector<Rect> boundRect(contours.size());
+
+      for (int i = 0; i < contours.size(); i++) {
+        if (contourArea(contours[i]) > 100) {
+          drawContours(src, contours, (int)i, Scalar(0, 0, 255), 2);
+
+          boundRect[i] = boundingRect(contours[i]);
+          rectangle(src, boundRect[i].tl(), boundRect[i].br(),
+                    Scalar(255, 0, 0), 2);
+          // top-left, bottom-right
+        }
+      }
+      imshow("movie", src);
+    }
+
+    char c = waitKey(30);
+    switch (c) {
+      case ' ':
+        playing = !playing;
+        break;
+      case 'e':
+        loopflag = false;
+        break;
+      case 's':
+        cap.set(CAP_PROP_POS_FRAMES, 0);
+      default:
+        break;
+    }
+  }
+
+  return 0;
+}
+```
+
+点群の外接矩形は，[`boundingRect()`](https://docs.opencv.org/4.5.0/d3/dc0/group__imgproc__shape.html#ga103fcbda2f540f3ef1c042d6a9b35ac7)にて求められます．
+
+
+上の例では，
+```cpp
+std::vector<Rect> boundRect(contours.size());
+```
+と，求めた外接矩形の情報`Rect`を入れる変数を準備しておき，ループの中で
+
+```cpp
+boundRect[i] = boundingRect(contours[i]);
+rectangle(src, boundRect[i].tl(), boundRect[i].br(),
+          Scalar(255, 0, 0), 2);
+```
+として，`boundingRect()`で`contours[i]`を囲む外接矩形をもとめ，
+[`rectangle()`](https://docs.opencv.org/4.5.0/d6/d6e/group__imgproc__draw.html#ga07d2f74cadcf8e305e810ce8eed13bc9)でその矩形を表示しています．
+
+`Rect`は矩形を扱うclass(正確にはClass Templateですが）で，矩形の左上の座標や幅や高さの情報を持っています．[参照](https://docs.opencv.org/4.5.0/d2/d44/classcv_1_1Rect__.html)
+
+
+`rectangle()`の引数は，
+- 一つ目: 出力画像
+- 二つ目: 描く矩形の左上(top-left)の座標
+- 三つ目: 描く矩形の右下(bottom-right)の座標
+- 四つ目: 線の色
+- 五つ目: 線の太さ（これを負の値にすると，塗りつぶす）
+
+です．
