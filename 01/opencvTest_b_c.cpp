@@ -8,6 +8,8 @@ int main()
     cv::Mat src = cv::imread("lena.jpg");
     cv::Mat dst;
   
+    cv::namedWindow("Display", cv::WINDOW_AUTOSIZE);
+    
     double alpha = 0.1; // contrast 
     double beta = 1.0; // brightness
      
