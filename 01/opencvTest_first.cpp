@@ -5,6 +5,7 @@
 int main() {
   cv::Mat image = cv::imread("lena.jpg");
 
+  cv::namedWindow("Display", cv::WINDOW_AUTOSIZE);
   cv::imshow("Display", image);
 
   cv::waitKey(0);
