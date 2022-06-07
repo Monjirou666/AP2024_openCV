@@ -25,5 +25,10 @@ OpenCV（Open Source Computer Vision Library）は，画像処理，画像解析
 3.  [背景差分，色検出](03/third_opencv.md)
 4.  [トラッキング](04/forth_opencv.md)
 
+## 最終課題
+
+https://classroom.github.com/a/BLxlbA24
+
 (option)
 - [カメラの利用について](camera.md)
+
