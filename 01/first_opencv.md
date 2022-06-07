@@ -14,6 +14,7 @@
 int main() {
   cv::Mat image = cv::imread("lena.jpg");
 
+  cv::namedWindow("Display", cv::WINDOW_AUTOSIZE);
   cv::imshow("Display", image);
 
   cv::waitKey(0);
@@ -25,7 +26,8 @@ int main() {
 #### 解説
 
 - `cv::Mat image = cv::imread("lena.jpg");`が画像ファイルを読み込み，cv::Mat型の変数imageにデータを格納します．
-- `cv::imshow("Display", image);`で，imageに入っている画像を表示します．一つ目の引数（"Display"）は画像を表示するWindowの名前（タイトル）になります．
+- `cv::namedWindow("Display", cv::WINDOW_AUTOSIZE);`で画像を表示するWindowを準備します．一つ目の引数（"Display"）は画像を表示するWindowの名前（タイトル）になります．二つ目の引数で，画像サイズに合わせてWindowサイズを変えるようにしています．
+- `cv::imshow("Display", image);`で，imageに入っている画像を表示します．
 - `cv::waitKey(0);`でキー入力を待ちます．引数は，待つ時間[msec]です．これを0にすると，キー入力があるまで，ずっと待ちます．
 
 ### コンパイル，実行
@@ -90,6 +92,8 @@ int main() {
   cv::Mat src = cv::imread("lena.jpg");
   cv::Mat dst;
 
+  cv::namedWindow("Display", cv::WINDOW_AUTOSIZE);
+
   int blur = 100;  // 変化の度合い 
 
   cv::medianBlur(src, dst, blur * 2 + 1);
@@ -117,6 +121,8 @@ int main()
 {
     cv::Mat src = cv::imread("lena.jpg");
     cv::Mat dst;
+  
+    cv::namedWindow("Display", cv::WINDOW_AUTOSIZE);
   
     double alpha = 0.1; // contrast 
     double beta = 1.0; // brightness
