@@ -27,7 +27,7 @@ OpenCV（Open Source Computer Vision Library）は，画像処理，画像解析
 
 ## 最終課題
 
-https://classroom.github.com/a/V7ZHWSh-
+
 
 (option)
 - [カメラの利用について](camera.md)
