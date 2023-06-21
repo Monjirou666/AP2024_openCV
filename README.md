@@ -26,9 +26,9 @@ OpenCV（Open Source Computer Vision Library）は，画像処理，画像解析
 4.  [トラッキング](04/forth_opencv.md)
 
 ## 最終課題
+[最終課題](final.md)
 
 
-
-(option)
+## option
 - [カメラの利用について](camera.md)
 
