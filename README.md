@@ -6,9 +6,9 @@ OpenCV（Open Source Computer Vision Library）は，画像処理，画像解析
 が，公式のTutorialsやExampleが非常に充実しているので，まずはそれらを参考にすることをお勧めします．
 
 - [公式](https://opencv.org/)
-- [公式のチュートリアル](https://docs.opencv.org/4.5.0/d9/df8/tutorial_root.html)
-- [公式のExample](https://docs.opencv.org/4.5.0/examples.html)
-- [OpenCV modules](https://docs.opencv.org/4.5.0/)
+- [公式のチュートリアル](https://docs.opencv.org/4.10.0/d9/df8/tutorial_root.html)
+- [公式のExample](https://docs.opencv.org/4.10.0/examples.html)
+- [OpenCV modules](https://docs.opencv.org/4.10.0/)
 
 検索して出てきたページを参考にすることは構いませんが，OpenCVのバージョン（古いバージョンでのコード例が検索にひっかかる）やpythonの話（できることは同じですが，C++とは関数の使い方が違います）に注意してください．
 
