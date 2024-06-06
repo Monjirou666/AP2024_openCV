@@ -3,7 +3,7 @@
 
 github classroomに準備しています．　　
 
-https://classroom.github.com/a/3JFhNrMB
+https://classroom.github.com/a/n0XLBaNv
 
 ## 提出期限
 
