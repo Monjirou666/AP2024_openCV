@@ -1,23 +1,39 @@
-# CMakeLists.txt
 cmake_minimum_required(VERSION 3.16)
 project(MyOpenCVProject CXX)
 
-add_definitions(-std=c++11)
+# C++17 標準を指定
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-
-# ソールファイルをここで指定．ファイル分割したときも，ここに追記．
+# ソースファイルをここで指定．ファイル分割したときも，ここに追記．
 set(SOURCES
-    opencvTest_first.cpp
+    # opencvTest_first.cpp
+    # opencvTest_blur.cpp
+    # opencvTest_b_c.cpp
+    # opencvTest_trackbar.cpp
+    # opencvTest_trackbar_callback.cpp
+    Practice01.cpp
 )
 
-# Create Main project
+set(CMAKE_OSX_ARCHITECTURES "arm64")
+
+
+# メインプロジェクトの作成
 add_executable(main
     ${SOURCES}
 )
 
-# For OpenCV
+# OpenCV 用の設定
 find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
-target_link_libraries(main ${OpenCV_LIBS})
-
-
+include_directories(/opt/homebrew/opt/opencv/include/opencv4)
+link_directories(/opt/homebrew/opt/opencv/lib)
+target_link_libraries(main PRIVATE 
+    ${OpenCV_LIBS}
+    opencv_core 
+    opencv_imgcodecs 
+    opencv_highgui 
+    opencv_imgproc 
+    opencv_videoio 
+    opencv_video
+)
