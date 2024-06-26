@@ -1,0 +1,3 @@
+/Users/tatsuya/アドバンストプログラミング/AP2024_openCV/02/build/CMakeFiles/main.dir
+/Users/tatsuya/アドバンストプログラミング/AP2024_openCV/02/build/CMakeFiles/edit_cache.dir
+/Users/tatsuya/アドバンストプログラミング/AP2024_openCV/02/build/CMakeFiles/rebuild_cache.dir
